@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>詐騙機率預測器</title>
+</head>
+<body>
+    <h2>輸入文字來偵測詐騙機率</h2>
+    <form id="scamForm">
+        <textarea name="text" rows="5" cols="50" placeholder="請輸入欲偵測的文字..."></textarea><br>
+        <button type="submit">分析</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById("scamForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch("/predict", {
+                method: "POST",
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById("result").innerHTML = 
+                `<p>詐騙機率: ${result.probability}</p>
+                 <p>關鍵字出現次數: ${result.keyword_count}</p>`;
+        });
+    </script>
+</body>
+</html>
